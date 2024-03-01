@@ -346,51 +346,135 @@ document.getElementById('update-total-amount-button').addEventListener('click', 
     }
 });
 
-// Attach event listeners to buttons
-document.getElementById("exportToCSV").addEventListener("click", exportDataToCSV);
-document.getElementById("exportToXLS").addEventListener("click", exportDataToXLS);
-document.getElementById("exportToSVG").addEventListener("click", exportDataToSVG);
-document.getElementById("exportToPNG").addEventListener("click", exportDataToPNG);
 
 // Retrieve data from localStorage
 const savedAgentData = JSON.parse(localStorage.getItem('agentData'));
 console.log(savedAgentData)
 const savedTeamData = JSON.parse(localStorage.getItem('teamData'));
 
-// Function to export data to CSV
-function exportDataToCSV() {
-    // Modify data according to your need if necessary
-    const data = getDataFromLocalStorage("agents"); // Prepare your data here
-    const data1 = getDataFromLocalStorage("teams");
-    const filename = "data.csv";
-    exportToCSV(data, filename);
-}
+document.getElementById("exportToCSV").addEventListener("click", function() {
+  var dropdown = document.getElementById("keySelectionDropdown");
+  var selectedKey = dropdown.options[dropdown.selectedIndex].value;
 
+  // Now you can pass the selected key to the export function
+  exportDataToCSV(selectedKey);
+});
+
+function exportDataToCSV(key) {
+  let data;
+  let filename;
+
+  // Get data based on the selected key
+  switch (key) {
+      case 'agents':
+          data = getDataFromLocalStorage("agents");
+          filename = "agents_data.csv";
+          break;
+      case 'teams':
+          data = getDataFromLocalStorage("teams");
+          filename = "teams_data.csv";
+          break;
+      case 'yearlyAgents':
+          data = [getDataFromLocalStorage("yearlyAgents")];
+          filename = "yearly_data.csv";
+          break;
+      default:
+          console.error("Invalid key selection.");
+          return;
+  }
+
+  // Export data to CSV
+  exportToCSV(data, filename);
+}
 // Function to export data to XLS
-function exportDataToXLS() {
-    // Modify data according to your need if necessary
-    const data = []; // Prepare your data here
-    const sheetName = "Sheet 1";
-    const filename = "data.xlsx";
-    exportToXLS(data, sheetName, filename);
+document.getElementById("exportToXLS").addEventListener("click", function() {
+  // Get all keys
+  var keys = ['agents', 'teams', 'yearlyAgents'];
+
+  // Export data to Excel with each key as a separate sheet
+  exportDataToXLS(keys);
+});
+
+function exportDataToXLS(keys) {
+  // Create a new Workbook
+  var wb = XLSX.utils.book_new();
+
+  // For each key, add a new worksheet to the Workbook
+  keys.forEach(function(key) {
+      var data = getDataFromLocalStorage(key);
+      if (data.length > 0) {
+          var ws = XLSX.utils.json_to_sheet(data);
+          XLSX.utils.book_append_sheet(wb, ws, key);
+      }
+  });
+
+  // Save the Workbook as an XLS file
+  var filename = "data.xlsx";
+  XLSX.writeFile(wb, filename);
 }
 
-// Function to export data to SVG
-function exportDataToSVG() {
-    // Prepare your SVG element
-    const svgElement = document.getElementById('yourSvgId');
-    const filename = "data.svg";
-    exportSVG(svgElement, filename);
+// Mock function to get data from local storage
+function getDataFromLocalStorage(key) {
+  // Mock implementation, replace with your actual code to fetch data from localStorage
+  return JSON.parse(localStorage.getItem(key)) || [];
 }
 
-// Function to export data to PNG
-function exportDataToPNG() {
-    // Prepare your SVG element
-    const svgElement = document.getElementById('yourSvgId');
-    const filename = "data.png";
-    svgToPng(svgElement, filename);
+document.getElementById("exportToPNG").addEventListener("click", function() {
+  // Get all keys
+  var keys = ['agents', 'teams', 'yearlyAgents'];
+
+  // Export data to PNG with each key as a separate image
+  exportDataToPNG(keys);
+});
+function exportDataToPNG(keys) {
+  keys.forEach(function(key) {
+      // Get data for the current key
+      var data = getDataFromLocalStorage(key);
+
+      // Generate an image based on the data for the key
+      var imageData = generatePlaceholderImage(key, data);
+
+      // Create a link element to trigger download
+      var link = document.createElement("a");
+      link.href = imageData;
+      link.download = key + ".png";
+      document.body.appendChild(link);
+
+      // Trigger download
+      link.click();
+
+      // Clean up
+      document.body.removeChild(link);
+  });
 }
 
+// Mock function to generate an image based on the data
+function generatePlaceholderImage(key, data) {
+  // Calculate the height of the canvas based on the number of data items
+  var canvasHeight = Math.max(200, 40 + data.length * 20); // Minimum height of 200px, each data item takes 20px height
+
+  // Create the canvas element with the calculated height
+  var canvas = document.createElement("canvas");
+  canvas.width = 200; // Fixed width
+  canvas.height = canvasHeight;
+  
+  var ctx = canvas.getContext("2d");
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "black";
+  ctx.font = "16px Arial";
+  ctx.fillText(key, 10, 20);
+  
+  // Render data onto the canvas
+  if (data && Array.isArray(data)) {
+      data.forEach(function(item, index) {
+          var y = 40 + (index * 20); // Adjust y position for each data item
+          ctx.fillText(item.name + ": " + item.sales, 10, y);
+      });
+  }
+  
+  return canvas.toDataURL("image/png");
+}
 // Добавляем обработчик событий для кнопки редактирования общей суммы
 function exportToCSV(data, filename) {
   // Check if data is an array
@@ -426,25 +510,68 @@ function exportToCSV(data, filename) {
   document.body.removeChild(link);
 }
 
-function exportToXLS(data, sheetName, filename) {
-    const ws = XLSX.utils.aoa_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, sheetName);
-
-    XLSX.writeFile(wb, filename);
+// Mock function to get data from local storage
+function getDataFromLocalStorage(key) {
+  // Mock implementation, replace with your actual code to fetch data from localStorage
+  return JSON.parse(localStorage.getItem(key)) || [];
 }
-function exportSVG(svgElement, filename) {
-    const serializer = new XMLSerializer();
-    const source = serializer.serializeToString(svgElement);
-    const blob = new Blob([source], {type: 'image/svg+xml;charset=utf-8'});
-    const url = URL.createObjectURL(blob);
 
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+document.getElementById("exportToSVG").addEventListener("click", function() {
+  // Get all keys
+  var keys = ['agents', 'teams', 'yearlyAgents'];
+
+  // Export data to SVG with each key as a separate image
+  exportDataToSVG(keys);
+});
+
+
+function exportDataToSVG(keys) {
+  keys.forEach(function(key) {
+      // Get data for the current key
+      var data = getDataFromLocalStorage(key);
+
+      // Generate SVG markup based on the data for the key
+      var svgMarkup = generateSVGMarkup(key, data);
+
+      // Create a link element to trigger download
+      var link = document.createElement("a");
+      link.href = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgMarkup);
+      link.download = key + ".svg";
+      document.body.appendChild(link);
+
+      // Trigger download
+      link.click();
+
+      // Clean up
+      document.body.removeChild(link);
+  });
+}
+
+// Mock function to generate SVG markup based on the data
+function generateSVGMarkup(key, data) {
+  // Replace this with your actual SVG generation logic based on your data
+  // For now, we'll just generate a simple SVG with the key name and data
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">';
+  svg += '<rect width="100%" height="100%" fill="white"/>';
+  svg += '<text x="10" y="20" font-family="Arial" font-size="16" fill="black">' + key + '</text>';
+  
+  // Render data onto the SVG
+  if (data && Array.isArray(data)) {
+      data.forEach(function(item, index) {
+          var y = 40 + (index * 20); // Adjust y position for each data item
+          svg += '<text x="10" y="' + y + '" font-family="Arial" font-size="14" fill="black">' + item.name + ': ' + item.sales + '</text>';
+      });
+  }
+
+  svg += '</svg>';
+  
+  return svg;
+}
+
+// Mock function to get data from local storage
+function getDataFromLocalStorage(key) {
+  // Mock implementation, replace with your actual code to fetch data from localStorage
+  return JSON.parse(localStorage.getItem(key)) || [];
 }
 function svgToPng(svgElement, filename) {
     const xml = new XMLSerializer().serializeToString(svgElement);

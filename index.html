@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvg@3.0.0/dist/browser/canvg.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@latest"></script>
@@ -53,7 +54,7 @@
         </div>
     </section>
 
-    <div class="form-container">
+    <!-- <div class="form-container">
         <h2>Добавить данные агента</h2>
         <input type="text" id="agentName" placeholder="Имя агента">
         <input type="number" id="agentSales" placeholder="Продажи">
@@ -104,11 +105,19 @@
         <button onclick="addYearlyAgent()">Добавить данные агента (годовые)</button>
     </div>
 
+    <select id="keySelectionDropdown">
+        <option value="agents">Daily sales agents</option>
+        <option value="teams">Daily Team Sales</option>
+        <option value="yearlyAgents">Agents annual sales</option>
+    </select>
+    
     <button id="exportToCSV">Экспорт в CSV</button>
+    
     <button id="exportToXLS">Экспорт в XLS</button>
     <button id="exportToSVG">Экспорт SVG</button>
-    <button id="exportToPNG">Экспорт в PNG</button>
+    <button id="exportToPNG">Экспорт в PNG</button> -->
 
+    <span><a href="./editor.html"> Editor page</a></span>
 
     <script src="script.js"></script>
 </body>

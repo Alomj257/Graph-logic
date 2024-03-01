@@ -5,7 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <title>Document</title>
+    <script src="node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvg@3.0.0/dist/browser/canvg.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@latest"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Editor page</title>
 </head>
 
 <body>
@@ -36,10 +45,17 @@
         </select>
         <button onclick="addTeamData()">Добавить данные команды</button>
     </div>
-    <input type="number" id="new-daily-target" placeholder="Установить новый таргет" />
-    <button id="update-target-button">Изменить дневной таргет</button>
-    <input type="number" id="edit-total-amount" placeholder="Установить новую общую сумму" />
-    <button id="update-total-amount-button">Изменить общую сумму</button>
+
+    <div class="form-container">
+        <input type="number" id="new-daily-target" placeholder="Установить новый таргет" />
+        <button id="update-target-button">Изменить дневной таргет</button>
+    </div>
+
+    <div class="form-container">
+        <input type="number" id="edit-total-amount" placeholder="Установить новую общую сумму" />
+        <button id="update-total-amount-button">Изменить общую сумму</button>
+    </div>
+
     <div class="form-container">
         <h2>Редактор данных агента</h2>
         <input type="text" id="topAgentName" placeholder="Имя агента">
@@ -53,11 +69,19 @@
         <button onclick="addYearlyAgent()">Добавить данные агента (годовые)</button>
     </div>
 
-    </div>
-    <button id="exportCSV">Экспорт в CSV</button>
-    <button id="exportXLS">Экспорт в XLS</button>
-    <button id="exportSVG">Экспорт SVG</button>
-    <button id="exportPNG">Экспорт в PNG</button>
+    <select id="keySelectionDropdown">
+        <option value="agents">Daily sales agents</option>
+        <option value="teams">Daily Team Sales</option>
+        <option value="yearlyAgents">Agents annual sales</option>
+    </select>
+    
+    <button id="exportToCSV">Экспорт в CSV</button>
+    
+    <button id="exportToXLS">Экспорт в XLS</button>
+    <button id="exportToSVG">Экспорт SVG</button>
+    <button id="exportToPNG">Экспорт в PNG</button>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
