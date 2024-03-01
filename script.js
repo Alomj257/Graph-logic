@@ -293,7 +293,7 @@ function updateTotalAmount() {
     document.getElementById('total-amount').textContent = totalAmount + '€';
 }
 
-// // Функция для обновления дневного таргета
+// Функция для обновления дневного таргета
 // function updateDailyTarget() {
 //     const newTarget = document.getElementById('new-daily-target').value;
 //    document.getElementById('daily-target').textContent = newTarget + '€';
@@ -318,6 +318,7 @@ function updateTotalAmount() {
 //   }
 // });
 
+// Функция для обновления дневного таргета
 function updateDailyTarget() {
     const newTarget = document.getElementById('new-daily-target').value;
     document.getElementById('daily-target').textContent = newTarget + '€';
@@ -345,21 +346,86 @@ document.getElementById('update-total-amount-button').addEventListener('click', 
     }
 });
 
+// Attach event listeners to buttons
+document.getElementById("exportToCSV").addEventListener("click", exportDataToCSV);
+document.getElementById("exportToXLS").addEventListener("click", exportDataToXLS);
+document.getElementById("exportToSVG").addEventListener("click", exportDataToSVG);
+document.getElementById("exportToPNG").addEventListener("click", exportDataToPNG);
+
+// Retrieve data from localStorage
+const savedAgentData = JSON.parse(localStorage.getItem('agentData'));
+console.log(savedAgentData)
+const savedTeamData = JSON.parse(localStorage.getItem('teamData'));
+
+// Function to export data to CSV
+function exportDataToCSV() {
+    // Modify data according to your need if necessary
+    const data = getDataFromLocalStorage("agents"); // Prepare your data here
+    // const data1 = getDataFromLocalStorage("teams");
+    const filename = "data.csv";
+    exportToCSV(data, filename);
+}
+
+// Function to export data to XLS
+function exportDataToXLS() {
+    // Modify data according to your need if necessary
+    const data = []; // Prepare your data here
+    const sheetName = "Sheet 1";
+    const filename = "data.xlsx";
+    exportToXLS(data, sheetName, filename);
+}
+
+// Function to export data to SVG
+function exportDataToSVG() {
+    // Prepare your SVG element
+    const svgElement = document.getElementById('yourSvgId');
+    const filename = "data.svg";
+    exportSVG(svgElement, filename);
+}
+
+// Function to export data to PNG
+function exportDataToPNG() {
+    // Prepare your SVG element
+    const svgElement = document.getElementById('yourSvgId');
+    const filename = "data.png";
+    svgToPng(svgElement, filename);
+}
 
 // Добавляем обработчик событий для кнопки редактирования общей суммы
 function exportToCSV(data, filename) {
-    let csvContent = "data:text/csv;charset=utf-8," 
-        + data.map(e => e.join(",")).join("\n");
+  // Check if data is an array
+  if (!Array.isArray(data)) {
+      console.error("Data is not in the expected format. Expected an array.");
+      return;
+  }
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", filename);
-    document.body.appendChild(link);
+  // Check if data is empty
+  if (data.length === 0) {
+      console.error("Data is empty. Nothing to export.");
+      return;
+  }
 
-    link.click();
-    document.body.removeChild(link);
+  // Convert array of objects to array of arrays
+  const dataArray = data.map(obj => [obj.name, obj.sales, obj.type]);
+
+  // Convert data to CSV format
+  const csvContent = "data:text/csv;charset=utf-8," +
+      dataArray.map(row => row.join(",")).join("\n");
+
+  // Create a link element to trigger download
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", filename);
+  document.body.appendChild(link);
+
+  // Trigger download
+  link.click();
+
+  // Clean up
+  document.body.removeChild(link);
 }
+
 function exportToXLS(data, sheetName, filename) {
     const ws = XLSX.utils.aoa_to_sheet(data);
     const wb = XLSX.utils.book_new();
@@ -406,21 +472,30 @@ function svgToPng(svgElement, filename) {
         }, 'image/png');
     };
 }
+
 localStorage.setItem('agentData', JSON.stringify(agentData));
 localStorage.setItem('teamData', JSON.stringify(teamData));
 
 // Получение сохраненных данных
 localStorage.setItem('agentData', JSON.stringify(agentData));
+console.log(agentData);
 localStorage.setItem('teamData', JSON.stringify(teamData));
-localStorage.setItem('AgentsChartData', JSON.stringify(AgentsChartData));
-localStorage.setItem('TeamsChartData', JSON.stringify(TeamsChartData));
+console.log(teamData);
+// localStorage.setItem('AgentsChartData', JSON.stringify(agentData));
+// console.log(savedAgentsChartData)
+// localStorage.setItem('TeamsChartData', JSON.stringify(teamData));
+// console.log(savedTeamsChartData)
 
 
-// Получение сохраненных данных
-const savedAgentData = JSON.parse(localStorage.getItem('agentData'));
-const savedTeamData = JSON.parse(localStorage.getItem('teamData'));
+// // Получение сохраненных данных
+// const savedAgentData = JSON.parse(localStorage.getItem('agentData'));
+// const savedTeamData = JSON.parse(localStorage.getItem('teamData'));
 const savedAgentsChartData = JSON.parse(localStorage.getItem('AgentsChartData'));
+localStorage.setItem('AgentsChartData', JSON.stringify(agentData));
+console.log(savedAgentsChartData)
 const savedTeamsChartData = JSON.parse(localStorage.getItem('TeamsChartData'));
+localStorage.setItem('TeamsChartData', JSON.stringify(teamData));
+console.log(savedTeamsChartData)
 // Функция для добавления данных агента
 // Функция для добавления данных агента
 // Создание графика ежедневных продаж агентов
