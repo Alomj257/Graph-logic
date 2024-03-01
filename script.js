@@ -361,7 +361,7 @@ const savedTeamData = JSON.parse(localStorage.getItem('teamData'));
 function exportDataToCSV() {
     // Modify data according to your need if necessary
     const data = getDataFromLocalStorage("agents"); // Prepare your data here
-    // const data1 = getDataFromLocalStorage("teams");
+    const data1 = getDataFromLocalStorage("teams");
     const filename = "data.csv";
     exportToCSV(data, filename);
 }
@@ -705,6 +705,7 @@ function addYearlyAgent() {
 function updateYearlyAgentsChart() {
   // Получаем текущие данные из localStorage
   var yearlyAgents = getDataFromLocalStorage('yearlyAgents') || [];
+  console.log(yearlyAgents)
 
   // Обновляем данные графика
   var agentLabels = [];
