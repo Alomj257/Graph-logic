@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика - Админ Панель</title>
+    <link rel="stylesheet" href="./style.css">
+
+    <script src="node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvg@3.0.0/dist/browser/canvg.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@latest"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <section id="container">
+        <div id="top-nav">
+            <h1>Приборная панель</h1>
+        </div>
+        <section id="container">
+            <div id="box-list" class="data-boxes">
+                <div class="box">
+                    <h2>Общая сумма</h2>
+                    <h1 id="total-amount">0€</h1>
+                </div>
+                <div class="box">
+                    <h2>Дневной таргет</h2>
+                    <h1 id="daily-target">0€</h1>
+                </div>
+            </div>
+        </section>
+        <div id="box-list" class="data-boxes">
+            <div class="box">
+                <h2>Ежедневные продажи агентов</h2>
+                <canvas id="dailyAgentsChart"></canvas>
+            </div>
+            <div class="box">
+                <h2>Ежедневные продажи команд</h2>
+                <canvas id="dailyTeamsChart"></canvas>
+            </div>
+            <div class="box">
+                <h2>Годовые продажи агентов</h2>
+                <canvas id="yearlyAgentsChart"></canvas>
+            </div>
+            <div class="box">
+                <canvas id="topAgentsChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <div class="form-container">
+        <h2>Добавить данные агента</h2>
+        <input type="text" id="agentName" placeholder="Имя агента">
+        <input type="number" id="agentSales" placeholder="Продажи">
+        <select id="agentType">
+            <option value="daily">Ежедневно</option>
+            <option value="yearly">Ежегодно</option>
+        </select>
+        <button onclick="addAgentData()">Добавить данные агента</button>
+    </div>
+    <div class="form-container">
+        <h2>Добавить данные команды</h2>
+        <select id="teamCountry">
+            <option value="Чехия">Чехия</option>
+            <option value="Германия">Германия</option>
+            <option value="Хорватия">Хорватия</option>
+            <option value="Франция">Франция</option>
+            <option value="Испания">Испания</option>
+            <option value="Россия">Россия</option>
+            <option value="Италия">Италия</option>
+        </select>
+        <input type="number" id="teamSales" placeholder="Продажи">
+        <select id="teamType">
+            <option value="daily">Ежедневно</option>
+        </select>
+        <button onclick="addTeamData()">Добавить данные команды</button>
+    </div>
+
+    <div class="form-container">
+        <input type="number" id="new-daily-target" placeholder="Установить новый таргет" />
+        <button id="update-target-button">Изменить дневной таргет</button>
+    </div>
+
+    <div class="form-container">
+        <input type="number" id="edit-total-amount" placeholder="Установить новую общую сумму" />
+        <button id="update-total-amount-button">Изменить общую сумму</button>
+    </div>
+
+    <div class="form-container">
+        <h2>Редактор данных агента</h2>
+        <input type="text" id="topAgentName" placeholder="Имя агента">
+        <input type="number" id="topAgentSales" placeholder="Продажи">
+        <button onclick="addTopAgent()">Добавить агента</button>
+    </div>
+    <div class="form-container">
+        <h2>Редактор годовых данных агента</h2>
+        <input type="text" id="yearlyAgentName" placeholder="Имя агента">
+        <input type="number" id="yearlyAgentSales" placeholder="Продажи">
+        <button onclick="addYearlyAgent()">Добавить данные агента (годовые)</button>
+    </div>
+
+    <button id="exportCSV">Экспорт в CSV</button>
+    <button id="exportXLS">Экспорт в XLS</button>
+    <button id="exportSVG">Экспорт SVG</button>
+    <button id="exportPNG">Экспорт в PNG</button>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

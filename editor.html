@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Добавить данные агента</h2>
+        <input type="text" id="agentName" placeholder="Имя агента">
+        <input type="number" id="agentSales" placeholder="Продажи">
+        <select id="agentType">
+            <option value="daily">Ежедневно</option>
+            <option value="yearly">Ежегодно</option>
+        </select>
+        <button onclick="addAgentData()">Добавить данные агента</button>
+    </div>
+    <div class="form-container">
+        <h2>Добавить данные команды</h2>
+        <select id="teamCountry">
+            <option value="Чехия">Чехия</option>
+            <option value="Германия">Германия</option>
+            <option value="Хорватия">Хорватия</option>
+            <option value="Франция">Франция</option>
+            <option value="Испания">Испания</option>
+            <option value="Россия">Россия</option>
+            <option value="Италия">Италия</option>
+        </select>
+        <input type="number" id="teamSales" placeholder="Продажи">
+        <select id="teamType">
+            <option value="daily">Ежедневно</option>
+        </select>
+        <button onclick="addTeamData()">Добавить данные команды</button>
+    </div>
+    <input type="number" id="new-daily-target" placeholder="Установить новый таргет" />
+    <button id="update-target-button">Изменить дневной таргет</button>
+    <input type="number" id="edit-total-amount" placeholder="Установить новую общую сумму" />
+    <button id="update-total-amount-button">Изменить общую сумму</button>
+    <div class="form-container">
+        <h2>Редактор данных агента</h2>
+        <input type="text" id="topAgentName" placeholder="Имя агента">
+        <input type="number" id="topAgentSales" placeholder="Продажи">
+        <button onclick="addTopAgent()">Добавить агента</button>
+    </div>
+    <div class="form-container">
+        <h2>Редактор годовых данных агента</h2>
+        <input type="text" id="yearlyAgentName" placeholder="Имя агента">
+        <input type="number" id="yearlyAgentSales" placeholder="Продажи">
+        <button onclick="addYearlyAgent()">Добавить данные агента (годовые)</button>
+    </div>
+
+    </div>
+    <button id="exportCSV">Экспорт в CSV</button>
+    <button id="exportXLS">Экспорт в XLS</button>
+    <button id="exportSVG">Экспорт SVG</button>
+    <button id="exportPNG">Экспорт в PNG</button>
+</body>
+
+</html>
